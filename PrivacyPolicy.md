@@ -1,6 +1,6 @@
 # Privacy Policy for Luck In Numbers
 
-**Effective Date:** [Insert Date]
+**Effective Date:** 10/4/2025
 
 ## Introduction
 
@@ -73,8 +73,8 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 ## Contact Us
 
 If you have any questions about this Privacy Policy, please contact us:
-- Email: [Your Email]
-- Website: [Your Website]
+- Email: matthew@purposebuilt.systems
+- Website: purposebuiltsystems.com
 
 ## Your Rights
 
@@ -88,4 +88,4 @@ Since most data is stored locally on your device, you can delete the app to remo
 
 ---
 
-**Last Updated:** [Insert Date]
+**Last Updated:** 10/4/2025
