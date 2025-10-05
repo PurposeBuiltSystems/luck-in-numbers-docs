@@ -1,6 +1,6 @@
 # Terms of Service for Luck In Numbers
 
-**Effective Date:** [Insert Date]
+**Effective Date:** 10/4/2025
 
 ## 1. Acceptance of Terms
 
@@ -136,8 +136,8 @@ These Terms are governed by the laws of [Your State/Country]. Any disputes will 
 ## 13. Contact Information
 
 For questions about these Terms, contact us:
-- Email: [Your Email]
-- Website: [Your Website]
+- Email: matthew@purposebuilt.systems
+- Website: https://purposebuiltsystems.com
 
 ## 14. Severability
 
@@ -151,4 +151,4 @@ These Terms, along with our Privacy Policy, constitute the entire agreement betw
 
 **Important Notice:** This App is for entertainment purposes only. Gambling can be addictive. Please gamble responsibly and within your means. If you have a gambling problem, seek help from appropriate resources.
 
-**Last Updated:** [Insert Date]
+**Last Updated:** 10/4/2025
