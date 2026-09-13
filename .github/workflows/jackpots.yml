@@ -1,0 +1,87 @@
+name: Refresh jackpots
+
+# Publishes docs/jackpots.json, which the Luck In Numbers app reads as static
+# JSON from GitHub Pages. Scraping lives here rather than on-device so a source
+# changing its markup is a redeploy for every user at once, instead of an App
+# Store release that users on older builds would never receive.
+
+on:
+  schedule:
+    # 06:00 UTC daily — 1:00 AM EST / 2:00 AM EDT, after both draw nights
+    # (Powerball 10:59 PM ET Mon/Wed/Sat, Mega Millions 11:00 PM ET Tue/Fri).
+    # GitHub's cron is best-effort and can run late; a few minutes of drift is
+    # immaterial for a figure that changes at most once a day.
+    - cron: '0 6 * * *'
+  workflow_dispatch: # manual trigger from the Actions tab
+
+# Least privilege: the job only needs to commit the refreshed file.
+permissions:
+  contents: write
+
+concurrency:
+  group: jackpots
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No dependencies to install — the script uses Node 20's global fetch.
+      - name: Fetch jackpots
+        run: node scripts/fetch-jackpots.js
+
+      - name: Verify the published file is valid and current
+        run: |
+          node -e '
+            const fs = require("fs");
+            const d = JSON.parse(fs.readFileSync("docs/jackpots.json", "utf8"));
+            const games = ["powerball", "megaMillions"];
+
+            // At least one game must have refreshed this run, or there is
+            // nothing to publish and the commit step would be noise.
+            const fresh = games.filter((g) => d[g].status.startsWith("success"));
+            if (fresh.length === 0) {
+              console.error("No game refreshed successfully.");
+              process.exit(1);
+            }
+
+            for (const g of fresh) {
+              const amount = d[g].estimatedPrize;
+              if (!(amount >= 20e6 && amount <= 5e9)) {
+                console.error(`${g} outside the plausible band: ${amount}`);
+                process.exit(1);
+              }
+            }
+            console.log(`Verified: ${fresh.join(", ")} refreshed.`);
+          '
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Ignore a diff that is only the fetchedAt timestamp: committing daily
+          # when no jackpot moved would bury real changes in the history.
+          if git diff --quiet -- docs/jackpots.json; then
+            echo "No change."
+            exit 0
+          fi
+          if [ -z "$(git diff -U0 -- docs/jackpots.json | grep '^[+-][^+-]' | grep -v 'fetchedAt' | grep -v 'lastUpdated')" ]; then
+            echo "Only timestamps changed; skipping commit."
+            git checkout -- docs/jackpots.json
+            exit 0
+          fi
+
+          git add docs/jackpots.json
+          git commit -m "Update jackpots: $(node -p '
+            const d = require("./docs/jackpots.json");
+            const f = (g) => d[g].estimatedPrize ? "$" + d[g].estimatedPrize.toLocaleString("en-US") : "n/a";
+            `PB ${f("powerball")}, MM ${f("megaMillions")}`
+          ')"
+          git push
