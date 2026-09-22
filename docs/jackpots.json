@@ -1,15 +1,15 @@
 {
-  "fetchedAt": "2026-09-20T10:30:31.873Z",
+  "fetchedAt": "2026-09-22T10:50:53.150Z",
   "powerball": {
-    "estimatedPrize": 313000000,
-    "cashValue": 133600000,
-    "lastUpdated": "2026-09-20T10:30:31.873Z",
+    "estimatedPrize": 332000000,
+    "cashValue": 141700000,
+    "lastUpdated": "2026-09-22T10:50:53.150Z",
     "status": "success (official)"
   },
   "megaMillions": {
     "estimatedPrize": 261000000,
     "cashValue": 110500000,
-    "lastUpdated": "2026-09-20T10:30:31.873Z",
+    "lastUpdated": "2026-09-22T10:50:53.150Z",
     "status": "success (official)"
   }
 }
